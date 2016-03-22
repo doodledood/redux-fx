@@ -33,7 +33,7 @@
 </p>
 
 <p align="center"><big>
-A library for managing side effect for Redux, inspired by the Elm Architecture.
+A library for managing side effects for Redux, inspired by the Elm Architecture.
 </big></p>
 
 
