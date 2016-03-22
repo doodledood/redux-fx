@@ -40,15 +40,13 @@ A library for managing side effect for Redux, inspired by the Elm Architecture.
 ## Install
 
 ```sh
-npm i -D redux-fx
+npm install redux-fx
 ```
 
 ## Usage
 
 ```js
-import reduxFx from "redux-fx"
-
-reduxFx() // true
+import {enhanceStoreWithEffects, fx, withFx} from "redux-fx"
 ```
 
 ## License
