@@ -47,6 +47,36 @@ npm install redux-fx
 
 ```js
 import {enhanceStoreWithEffects, fx, withFx} from "redux-fx"
+
+...
+
+// Decorate createStore with enhanceStoreWithEffects to enable support for effects
+const createStoreWithMiddleware = compose(
+  applyMiddleware(someMiddleware),
+  enhanceStoreWithEffects(),
+  devTools()
+)(createStore);
+
+...
+
+// Create effects of signature (any) => (dispatch, getState) => (any)
+const incrementWithDelay = seconds => dispatch => setTimeout(() => dispatch({type: "INCREMENT"}), seconds * 1000);
+
+...
+
+// Use withFx to decorate your reducer so you can now write in elm-style.
+// Use fx to create effect descriptors that are fully testable.
+const reducer = withFx((state, action) => {
+  switch (action.type) {
+    case "INCREMENT":
+      return [{count: state.count + 1}, fx(incrementWithDelay, 1), fx(incrementWithDelay, 2)];
+    case "DECREMENT":
+      return {count: state.count - 1};
+    default:
+      return state;
+  }
+});
+
 ```
 
 ## License
