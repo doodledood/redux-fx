@@ -67,7 +67,7 @@ export function withFx(reducer) {
     if (Array.isArray(result)) {
       const [newState, ...effects] = result;
 
-      if (!effects || !effects.filter(effect => typeof effect === "object" && effect.type === "FX")) {
+      if (!effects || effects.filter(effect => typeof effect === "object" && effect.type === "FX").length !== effects.length) {
         return result;
       }
 
