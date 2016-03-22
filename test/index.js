@@ -1,5 +1,7 @@
 import test from "tape"
-import {withFx, fx, collectAndClearEffectsFrom} from "../src"
+import withFx from "../src/withFx"
+import fx from "../src/fx"
+import collectAndClearEffectsFrom from "../src/collectAndClearEffectsFrom"
 
 test("given an effect, return a testable effect descriptor", t => {
   t.plan(1);
