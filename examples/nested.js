@@ -26,7 +26,7 @@ const Counter = ({count, dispatch} => {
 const appReducer = (state, action) => {
   switch (action.type) {
     case "RIGHT":
-      const [rightCounterState, rightCounterEffect] = counterReducer(state.right, action.counterAction);
+      const [rightCounterState, rightCounterEffect] = counterReducer(state.right, action.childAction);
       return [
               {
                 right: rightCounterState,
@@ -35,7 +35,7 @@ const appReducer = (state, action) => {
               mapFx(counterAction => {type: "RIGHT", counterAction}, rightCounterEffect)
             ];
     case "LEFT":
-      const [leftCounterState, leftCounterEffect] = counterReducer(state.left, action.counterAction);
+      const [leftCounterState, leftCounterEffect] = counterReducer(state.left, action.childAction);
       return [
               {
                 right: state.right,
