@@ -1,4 +1,3 @@
-import isPlainObject from 'lodash/isPlainObject'
 import {defaultEffectsRunner} from './defaultEffectsRunner'
 import {EffectTypes, none} from './fx'
 
@@ -12,51 +11,28 @@ export default function enhanceStoreWithEffects(effectsRunner = defaultEffectsRu
   }
 
   return (createStore) => (reducer, initialState, enhancer) => {
-    var store = createStore(reducer, initialState, enhancer);
-    var isDispatching = false;
+    let currentEffect = none();
+    var store = createStore(decorateReducer(reducer, effect => currentEffect = effect), initialState, enhancer);
 
     function dispatch(action) {
-      if (!isPlainObject(action)) {
-        throw new Error(
-          'Actions must be plain objects. ' +
-          'Use custom middleware for async actions.'
-        )
-      }
+      const dispatchedAction = store.dispatch(action);
 
-      if (typeof action.type === 'undefined') {
-        throw new Error(
-          'Actions may not have an undefined "type" property. ' +
-          'Have you misspelled a constant?'
-        )
-      }
+      effectsRunner(currentEffect, dispatch, store.getState);
 
-      if (isDispatching) {
-        throw new Error('Reducers may not dispatch actions.')
-      }
-
-      let effect = none();
-      try {
-        isDispatching = true;
-
-        [store.currentState, effect] = liftIntoStateAndEffects(store.currentReducer(store.currentState, action));
-      } finally {
-        isDispatching = false
-      }
-
-      let listeners = store.currentListeners = store.nextListeners;
-      for (var i = 0; i < listeners.length; i++) {
-        listeners[i]();
-      }
-
-      effectsRunner(effect, dispatch, store.getState);
-
-      return action;
+      return dispatchedAction;
     }
 
     return Object.assign(store, {
       dispatch
     });
   }
+}
+
+function decorateReducer(reducer, setEffect) {
+  const [currentState, effect] = liftIntoStateAndEffects(reducer);
+  setEffect(effect);
+
+  return currentState;
 }
 
 export function liftIntoStateAndEffects(state) {
