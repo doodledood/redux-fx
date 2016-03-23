@@ -1,6 +1,6 @@
 {
   "name": "redux-fx",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A library for managing side effect for Redux, inspired by the Elm Architecture.",
   "main": "dist/index.js",
   "files": [
