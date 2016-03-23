@@ -35,11 +35,13 @@ export default function enhanceStoreWithEffects(effectsRunner = defaultEffectsRu
   }
 }
 
-function decorateReducer(reducer, setEffect) {
-  const [currentState, effect] = liftIntoStateAndEffects(reducer);
-  setEffect(effect);
+export function decorateReducer(reducer, setEffect) {
+  return (action, state) => {
+    const [currentState, effect] = liftIntoStateAndEffects(reducer(action, state));
+    setEffect(effect);
 
-  return currentState;
+    return currentState;
+  };
 }
 
 export function liftIntoStateAndEffects(state) {
