@@ -13,6 +13,7 @@ export default function enhanceStoreWithEffects(effectsRunner = defaultEffectsRu
 
   return (createStore) => (reducer, initialState, enhancer) => {
     var store = createStore(reducer, initialState, enhancer);
+    var isDispatching = false;
 
     function dispatch(action) {
       if (!isPlainObject(action)) {
@@ -29,17 +30,17 @@ export default function enhanceStoreWithEffects(effectsRunner = defaultEffectsRu
         )
       }
 
-      if (store.isDispatching) {
+      if (isDispatching) {
         throw new Error('Reducers may not dispatch actions.')
       }
 
       let effect = none();
       try {
-        store.isDispatching = true
+        isDispatching = true;
 
-          [store.currentState, effect] = liftIntoStateAndEffects(store.currentReducer(store.currentState, action));
+        [store.currentState, effect] = liftIntoStateAndEffects(store.currentReducer(store.currentState, action));
       } finally {
-        store.isDispatching = false
+        isDispatching = false
       }
 
       let listeners = store.currentListeners = store.nextListeners;
