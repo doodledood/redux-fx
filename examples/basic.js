@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
-import { fx, withFx, enhanceStoreWithEffects } from 'react-fx'
+import { fx, enhanceStoreWithEffects } from 'react-fx'
 
 const App = connect({state, dispatch} => {
   const count = state.count;
@@ -18,16 +18,16 @@ const App = connect({state, dispatch} => {
 
 const incrementWithDelay = seconds => dispatch => setTimeout(() => dispatch({type: "INCREMENT"}), seconds * 1000);
 
-const reducer = withFx((state, action) => {
+const reducer = (state, action) => {
   switch (action.type) {
     case "INCREMENT":
-      return [{count: state.count + 1}, fx(incrementWithDelay, 1), fx(incrementWithDelay, 2)];
+      return [{count: state.count + 1}, fx(incrementWithDelay, 1)];
     case "DECREMENT":
       return {count: state.count - 1};
     default:
       return state;
   }
-});
+};
 
 const store = createStore(reducer, initialState, enhanceStoreWithEffects);
 
