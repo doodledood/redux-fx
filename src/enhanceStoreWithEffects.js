@@ -36,8 +36,8 @@ export default function enhanceStoreWithEffects(effectsRunner = defaultEffectsRu
 }
 
 export function decorateReducer(reducer, setEffect) {
-  return (action, state) => {
-    const [currentState, effect] = liftIntoStateAndEffects(reducer(action, state));
+  return (state, action) => {
+    const [currentState, effect] = liftIntoStateAndEffects(reducer(state, action));
     setEffect(effect);
 
     return currentState;
