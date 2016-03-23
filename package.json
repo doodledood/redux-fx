@@ -58,5 +58,8 @@
     "tap-spec": "*",
     "tape": "*",
     "watch": "*"
+  },
+  "dependencies": {
+    "lodash": "^4.6.1"
   }
 }

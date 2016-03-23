@@ -1,5 +1,6 @@
-import collectAndClearEffectsFrom from './collectAndClearEffectsFrom'
+import isPlainObject from 'lodash/isPlainObject'
 import defaultEffectsRunner from './defaultEffectsRunner'
+import {EffectTypes, none} from './fx'
 
 /**
  * @param {Function} A functions that knows how to handle effects.
@@ -14,27 +15,57 @@ export default function enhanceStoreWithEffects(effectsRunner = defaultEffectsRu
     var store = createStore(reducer, initialState, enhancer);
 
     function dispatch(action) {
-
-      const dispatchedAction = store.dispatch(action);
-
-      if (typeof action !== "object") {
-        console.warn("The dispatched action is not an object and therefore redux-fx will not handle it.");
-        return action;
+      if (!isPlainObject(action)) {
+        throw new Error(
+          'Actions must be plain objects. ' +
+          'Use custom middleware for async actions.'
+        )
       }
 
-      const effects = collectAndClearEffectsFrom(action);
-
-      if (!effects) {
-        return action;
+      if (typeof action.type === 'undefined') {
+        throw new Error(
+          'Actions may not have an undefined "type" property. ' +
+          'Have you misspelled a constant?'
+        )
       }
 
-      effectsRunner(effects, dispatch, store.getState);
+      if (store.isDispatching) {
+        throw new Error('Reducers may not dispatch actions.')
+      }
+
+      let effect = none();
+      try {
+        store.isDispatching = true
+
+          [store.currentState, effect] = liftIntoStateAndEffects(store.currentReducer(store.currentState, action));
+      } finally {
+        store.isDispatching = false
+      }
+
+      let listeners = store.currentListeners = store.nextListeners;
+      for (var i = 0; i < listeners.length; i++) {
+        listeners[i]();
+      }
+
+      effectsRunner(effect, dispatch, store.getState);
 
       return action;
     }
 
-    return Object.assign({}, store, {
+    return Object.assign(store, {
       dispatch
     });
   }
+}
+
+export function liftIntoStateAndEffects(state) {
+  if (Array.isArray(state) && state.length === 2 && isEffect(state[1])) {
+    return state;
+  }
+
+  return [state, none()];
+}
+
+export function isEffect(obj) {
+  return obj && Object.values(EffectTypes).includes(obj.type);
 }

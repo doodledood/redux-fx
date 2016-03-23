@@ -1,11 +1,14 @@
 import enhanceStoreWithEffects from './enhanceStoreWithEffects'
-import defaultEffectsRunner from './defaultEffectsRunner'
-import fx from './fx'
-import withFx from './withFx'
+import {defaultEffectsRunner} from './defaultEffectsRunner'
+import {fx, none, batch, mapFx, EffectTypes} from './fx'
 
 export {
   enhanceStoreWithEffects,
   defaultEffectsRunner,
   fx,
-  withFx
+  none,
+  batch,
+  tag,
+  mapFx,
+  EffectTypes
 }
