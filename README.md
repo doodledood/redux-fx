@@ -32,7 +32,7 @@
   </a>
 </p>
 
-<p align="center"><big>
+<p><big>
 A library for managing side effects for Redux, inspired by the Elm Architecture.
 </big></p>
 
@@ -46,15 +46,16 @@ npm install redux-fx
 ## Usage
 
 ```js
-import {enhanceStoreWithEffects, fx, withFx} from "redux-fx"
+import {enhanceStoreWithEffects, fx} from "redux-fx"
 
 ...
 
-// Decorate createStore with enhanceStoreWithEffects to enable support for effects
+// Decorate createStore with enhanceStoreWithEffects to enable support for effects 
+// NOTE: the enhancer HAS to come last in order for other enhancers to work
 const createStoreWithMiddleware = compose(
   applyMiddleware(someMiddleware),
-  enhanceStoreWithEffects(),
-  devTools()
+  devTools(),
+  enhanceStoreWithEffects()
 )(createStore);
 
 ...
@@ -64,18 +65,17 @@ const incrementWithDelay = seconds => dispatch => setTimeout(() => dispatch({typ
 
 ...
 
-// Use withFx to decorate your reducer so you can now write in elm-style.
-// Use fx to create effect descriptors that are fully testable.
-const reducer = withFx((state, action) => {
+// Return a [state,effect] tuple to create effect descriptors that are fully testable.
+const reducer = (state, action) => {
   switch (action.type) {
     case "INCREMENT":
-      return [{count: state.count + 1}, fx(incrementWithDelay, 1), fx(incrementWithDelay, 2)];
+      return [{count: state.count + 1}, fx(incrementWithDelay, 1)];
     case "DECREMENT":
       return {count: state.count - 1};
     default:
       return state;
   }
-});
+};
 
 ```
 
