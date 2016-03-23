@@ -1,5 +1,5 @@
 import isPlainObject from 'lodash/isPlainObject'
-import defaultEffectsRunner from './defaultEffectsRunner'
+import {defaultEffectsRunner} from './defaultEffectsRunner'
 import {EffectTypes, none} from './fx'
 
 /**
