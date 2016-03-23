@@ -24,9 +24,8 @@ export default function enhanceStoreWithEffects(effectsRunner = defaultEffectsRu
       return dispatchedAction;
     }
 
-
-    function replaceReducer(r) {
-      return store.replaceReducer(decorateReducer(r));
+    function replaceReducer(reducer) {
+      return store.replaceReducer(decorateReducer(reducer, _ => {}));
     }
 
     return Object.assign({}, store, {
