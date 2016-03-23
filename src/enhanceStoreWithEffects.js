@@ -24,10 +24,6 @@ export default function enhanceStoreWithEffects(effectsRunner = defaultEffectsRu
       return dispatchedAction;
     }
 
-    function getState() {
-      const [state, _] = liftIntoStateAndEffects(store.getState());
-      return state;
-    }
 
     function replaceReducer(r) {
       return store.replaceReducer(decorateReducer(r));
