@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
-import { fx, mapFx, enhanceStoreWithEffects } from 'react-fx'
+import { fx, mapFx, enhanceStoreWithEffects, tag } from 'react-fx'
 
 const App = connect({state, dispatch} => {
   return (
