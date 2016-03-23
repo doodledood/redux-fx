@@ -19,6 +19,8 @@ export default function enhanceStoreWithEffects(effectsRunner = defaultEffectsRu
 
       effectsRunner(currentEffect, dispatch, store.getState);
 
+      currentEffect = none();
+
       return dispatchedAction;
     }
 
