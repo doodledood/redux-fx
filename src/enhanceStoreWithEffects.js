@@ -30,7 +30,6 @@ export default function enhanceStoreWithEffects(effectsRunner = defaultEffectsRu
 
     return Object.assign({}, store, {
       dispatch,
-      getState,
       replaceReducer
     });
   }
