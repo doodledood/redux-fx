@@ -51,7 +51,6 @@ import {enhanceStoreWithEffects, fx} from "redux-fx"
 ...
 
 // Decorate createStore with enhanceStoreWithEffects to enable support for effects 
-// NOTE: the enhancer HAS to come last in order for other enhancers to work
 const createStoreWithMiddleware = compose(
   applyMiddleware(someMiddleware),
   devTools(),
