@@ -1,3 +1,5 @@
+<h1> THIS LIBRARY IS CURRENTLY NOT MAINTAINED</h1>
+
 <big><h1 align="center">redux-fx</h1></big>
 
 <p align="center">
